@@ -1,0 +1,44 @@
+---
+title: "joining_data"
+author: "Tanzania Jackson"
+date: "7/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+Illegal_Pet<-read_csv('https://data.cityofnewyork.us/resource/erm2-nwe9.csv?complaint_type=Illegal+Animal+Kept+as+Pet&borough=QUEENS')
+
+Sanitation_Dep_Request<- read.csv('https://data.cityofnewyork.us/resource/erm2-nwe9.csv?agency_name=Department+of+Sanitation&borough=QUEENS')
+```
+
+
+```{r}
+illegal_pet2<-Illegal_Pet%>%
+  left_join(Sanitation_Dep_Request, by="incident_address")%>%
+  count(Illegal_Pet,"incident_address", sort=TRUE)
+pets<-illegal_pet2%>%
+  select(incident_address,complaint_type)%>%
+  count(incident_address)
+
+```
+
+```{r}
+Sanitation_Dep_Request%>%
+  left_join(Illegal_Pet, by= "incident_address")%>%
+  count(Sanitation_Dep_Request, "incident_address", sort=TRUE)
+sanitation<-Sanit%>%
+  select(incident_address, complaint_type)%>%
+  count(incident_address)
+```
+
+```{r}
+joined_data<-pets%>%
+  inner_join(sanitation, by= "incident_address")
+```
+
+
